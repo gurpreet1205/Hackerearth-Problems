@@ -1,0 +1,146 @@
+#include<bits/stdc++.h>
+using namespace std;
+long long int modifiedBinarySearch(long long int *a,long long int n,long long int x)
+{
+	long long int low=0,high=n-1,mid;
+	if(a[0]>x)
+		return 0;
+	if(a[n-1]<x)
+		return n;
+	while(low<=high)
+	{
+		mid=(low+high)/2;
+		if(a[mid]>=x)
+		{
+			if(a[mid-1]<x)
+				return mid;
+			else
+				high=mid-1;
+		}
+		else
+		{
+			low=mid+1;
+		}
+	}
+}
+int main()
+{
+	long long int t,n,i,j,k;
+	cin>>t;
+	while(t--)
+	{
+		cin>>n;
+		long long int a[n],b[n],ans1,ans2,flag=0,ans,x,y,z,k=1;
+		for(i=0;i<n;i++)
+		{
+			cin>>a[i];
+		}
+		for(i=0;i<n;i++)
+			cin>>b[i];
+		sort(a,a+n);
+		sort(b,b+n);
+		ans1=0;
+		for(i=n/2;i>=0;i--)
+		{
+			if(a[i]==b[n-i-1])
+			{
+				flag=1;
+				break;
+			}
+			ans1++;
+		}
+		ans2=0;
+		for(i=n/2;i>=0;i--)
+		{
+			if(b[i]==a[n-i-1])
+			{
+				flag=1;
+				break;
+			}
+			ans2++;
+		}
+		ans=min(ans1,ans2);
+		ans1=1000000000;
+		for(i=0;i<n-1;i++)
+		{
+			if(a[i]==a[i+1]&&(i==0||a[i-1]!=a[i]))
+			{
+				x=modifiedBinarySearch(b,n,a[i]);
+				k=1;
+				while(true)
+				{
+					if(a[n-x-1+k]==a[i])
+					{
+						if(x>n/2)
+						{
+							y=x-n/2;
+						}
+						else
+							y=n/2-x+1;
+						ans1=min(ans1,y);
+						//cout<<ans1<<"\n";
+						flag=1;
+					}
+					if(flag==0)
+					{
+						i++;
+						if(i!=n-1&&a[i]==a[i+1])
+						{
+							k++;
+							continue;
+						}
+						else
+							break;
+					}
+					else
+						break;
+				}
+			}
+		}
+		ans2=1000000000;
+		for(i=0;i<n-1;i++)
+		{
+			k=1;
+			if(b[i]==b[i+1]&&(i==0||b[i-1]!=b[i]))
+			{
+				x=modifiedBinarySearch(a,n,b[i]);
+				k=1;
+				while(true)
+				{
+				if(b[n-x-1+k]==b[i])
+				{
+					if(x>n/2)
+					{
+						y=x-n/2;
+					}
+					else
+						y=n/2-x+1;
+					ans2=min(ans2,y);
+					flag=1;
+				}
+				if(flag==0)
+				{
+					i++;
+					if(i!=n-1&&b[i]==b[i+1])
+					{
+						k++;
+						continue;
+					}
+					else
+						break;
+				}
+				else
+					break;
+			}
+			}
+		}
+		if(flag==0)
+			cout<<"-1\n";
+		else
+		{
+			ans=min(ans,min(ans1,ans2));
+			cout<<ans<<"\n";
+		}
+	}
+	return 0;
+}
